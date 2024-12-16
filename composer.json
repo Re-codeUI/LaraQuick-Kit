@@ -12,17 +12,18 @@
     ],
     "autoload": {
         "psr-4": {
-            "YourVendor\\LaravelQuick\\": "src/"
+            "Magicbox\\LaraQuick\\": "src/"
         }
     },
     "require":{
         "php": "^8.0",
-        "illuminate/support": "^10.0"
+        "illuminate/support": "^10.0",
+        "spatie/laravel-permission": "^6.10"
     },
     "extra":{
         "laravel": {
             "providers": [
-                "YourVendor\\LaravelQuick\\Providers\\LaraQuickServiceProvider"
+                "Magicbox\\LaraQuick\\Providers\\LaraQuickServiceProvider"
             ],
             "aliases": []
         }
