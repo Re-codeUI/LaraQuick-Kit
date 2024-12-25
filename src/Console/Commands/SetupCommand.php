@@ -3,6 +3,7 @@
 namespace Magicbox\LaraQuickKit\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Magicbox\LaraQuickKit\Console\Helpers\SetupHelper;
 
 class SetupCommand extends Command
