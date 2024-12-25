@@ -61,8 +61,9 @@ class SetupHelper
         ];
 
         foreach ($users as $userData) {
-            $user = \App\Models\User::create($userData);
+            $user = \Magicbox\LaraQuickKit\Models\User::create($userData);
             $user->assignRole($userData['role']);
+
         }
 
         echo "Default users created." . PHP_EOL;
