@@ -3,7 +3,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Magicbox\LaraQuick\Models\User;
+use Magicbox\LaraQuickKit\Models\User;
 
 class AuthTest extends TestCase
 {

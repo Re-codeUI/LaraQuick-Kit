@@ -1,6 +1,6 @@
 <?php
 
-namespace Databse\Seeders;
+namespace Magicbox\LaraQuickKit\Database\Seeders;
 
 use Illumintae\Database\Seeder;
 use Spatie\Permission\Models\Role;

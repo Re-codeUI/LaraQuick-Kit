@@ -1,4 +1,5 @@
 <?php
+namespace Magicbox\LaraQuickKit\Database\Migrations\Crm;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

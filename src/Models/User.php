@@ -9,6 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'laraquick_users'; // Nama tabel yang disesuaikan
+    protected $table = 'users'; // Nama tabel yang disesuaikan
 }
 

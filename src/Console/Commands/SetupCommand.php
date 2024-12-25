@@ -34,22 +34,13 @@ class SetupCommand extends Command {
         $this->info('Selected UI Framework: ' . $uiFramework);
 
         // Step 3: Pilih login system and roles
-        $enableLogin = $this->confirm('Would you like to enable authentication with user roles?', true);
-
-        if ($enableLogin) {
-            $this->info('Configuring authentication system...');
-            Artisan::call('make:auth'); // Membuat auth jika belum tersedia
-            $this->info('Authentication system created!');
-
-            // Pilih roles dan permissions
-            if ($this->confirm('Would you like to set up roles and permissions?', true)) {
-                $this->info('Setting up roles and permissions...');
-                Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
-                Artisan::call('migrate');
-                $this->info('Roles and permissions have been set up!');
-            }
-
-            // Step 4: Pilih roles yang ingin ditambahkan
+        if ($this->confirm('Would you like to set up roles and permissions?', true)) {
+            $this->info('Setting up roles and permissions...');
+            Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
+            Artisan::call('migrate');
+            $this->info('Roles and permissions have been set up!');
+        
+            // Pilih roles yang ingin ditambahkan
             $roles = $this->choice(
                 'Choose the roles you want to create for the system (Admin, User, etc.)',
                 ['Admin', 'User', 'Editor'],
@@ -57,10 +48,14 @@ class SetupCommand extends Command {
                 null,
                 true
             );
-
-            $this->info('Roles: ' . implode(',', $roles));
-            $this->call('db:seed', ['--class' => 'RoleSeeder']);
+        
+            foreach ($roles as $role) {
+                \Spatie\Permission\Models\Role::create(['name' => $role]);
+            }
+        
+            $this->info('Roles created: ' . implode(', ', $roles));
         }
+        
 
         // Step 5: Tambahkan data dummy
         $addDummyData = $this->confirm('Would you like to generate some dummy data?', true);
@@ -86,9 +81,6 @@ class SetupCommand extends Command {
             $this->call('migrate', ['--path' => 'database/migrations/crm']);
         }
 
-        if (in_array('Company Profile', $modules)) {
-            $this->call('migrate', ['--path' => 'database/migrations/company']);
-        }
 
         // Menyelesaikan proses setup
         $this->info('Setup Complete!');
