@@ -114,12 +114,16 @@ class SetupHelper
     }
     public static function copyPermissionConfig()
     {
-        $source = __DIR__ . '/../../vendor/spatie/laravel-permission/config/permission.php';  // Path ke file permission.php di vendor
-        $destination = base_path('config/permission.php');  // Tujuan penyalinan ke dalam config di Laravel
+        echo 'Copying Spatie permission config file...' . PHP_EOL;
+        $sourcePath = base_path('vendor/spatie/laravel-permission/config/permission.php');
+        $destinationPath = config_path('permission.php');
 
-        if (!File::exists($destination)) {
-            File::copy($source, $destination);  // Menyalin file konfigurasi
-            echo "permission.php config file copied." . PHP_EOL;
+        if (File::exists($sourcePath)) {
+            File::copy($sourcePath, $destinationPath);
+            echo 'Spatie permission config file copied successfully.' . PHP_EOL;
+        } else {
+            echo 'Spatie permission config file not found.' . PHP_EOL;
         }
     }
+
 }
