@@ -1,13 +1,13 @@
 <?php 
 namespace Magicbox\LaraQuickKit\Http\Controllers;
 
-use App\Models\User;
+use Magicbox\LaraQuickKit\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Magicbox\Laraquick\Http\Requests\LoginRequest;
-use Magicbox\Laraquick\Http\Requests\RegisterRequest;
+use Magicbox\LaraQuickKit\Http\Requests\LoginRequest;
+use Magicbox\LaraquickKit\Http\Requests\RegisterRequest;
 
 
 class AuthController extends Controller
