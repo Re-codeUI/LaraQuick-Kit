@@ -10,8 +10,8 @@ class RoleSeeder extends Seeder{
 
     public function run(){
         //Membuat roles
-        $admin  = Role::created(['name'  => 'Admin']);
-        $user   = Role::created(['name'   => 'User']);
+        $admin  = Role::created(['name' => 'Admin']);
+        $user   = Role::created(['name' => 'User']);
         $editor = Role::created(['name' => 'Editor']);
 
         //Menambahkan permissions 

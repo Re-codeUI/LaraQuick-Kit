@@ -3,86 +3,62 @@
 namespace Magicbox\LaraQuickKit\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
+use Magicbox\LaraQuickKit\Console\Helpers\SetupHelper;
 
-class SetupCommand extends Command {
-    
+class SetupCommand extends Command
+{
     protected $signature = 'laraquick:setup';
     protected $description = 'Interactive Setup For LaraQuick';
 
-    public function handle() {
-        $this->info('Welcome to LaraQuick Setup!');
+    public function handle()
+    {
+        // Step 1: Banner awal
+        SetupHelper::displayMagicBanner();
 
-        // Step 1: Pilih Modul
+        $this->info("Let's configure your Laravel application with LaraQuick!");
+
+        // Step 2: Pilih Modul
         $modules = $this->choice(
             'Which modules would you like to enable?',
-            ['Inventory', 'Sales', 'CRM', 'None'],
+            ['Inventory', 'Sales', 'CRM'],
             0,
             null,
             true
         );
+        $this->info('Selected Modules: ' . implode(', ', $modules));
 
-        $this->info('Selected Modules: ' . implode(',', $modules));
-
-        // Step 2: Pilih Framework UI
+        // Step 3: Pilih Framework UI
         $uiFramework = $this->choice(
             'Which UI framework would you like to use?',
             ['Bootstrap', 'Tailwind', 'Vue.js'],
             0
         );
+        SetupHelper::installFrameworkUI($uiFramework);
 
-        $this->info('Selected UI Framework: ' . $uiFramework);
+        // Step 4: Setup Login System
+        $this->info('Setting up custom authentication system...');
+        Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
+        Artisan::call('migrate:fresh');
+        $this->info('Custom authentication system set up!');
 
-        // Step 3: Pilih login system and roles
-        if ($this->confirm('Would you like to set up roles and permissions?', true)) {
-            $this->info('Setting up roles and permissions...');
-            Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
-            Artisan::call('migrate');
-            $this->info('Roles and permissions have been set up!');
-        
-            // Pilih roles yang ingin ditambahkan
-            $roles = $this->choice(
-                'Choose the roles you want to create for the system (Admin, User, etc.)',
-                ['Admin', 'User', 'Editor'],
-                0,
-                null,
-                true
-            );
-        
-            foreach ($roles as $role) {
-                \Spatie\Permission\Models\Role::create(['name' => $role]);
-            }
-        
-            $this->info('Roles created: ' . implode(', ', $roles));
+        // Step 5: Seeders untuk Login
+        $this->info('Seeding roles, permissions, and default users...');
+        foreach ($modules as $module) {
+            SetupHelper::createModuleRoles($module);
         }
-        
+        SetupHelper::createDefaultUsers();
 
-        // Step 5: Tambahkan data dummy
-        $addDummyData = $this->confirm('Would you like to generate some dummy data?', true);
+        // Step 6: Menampilkan kredensial login
+        $this->info('Here are the login credentials for default users:');
+        $this->table(
+            ['Name', 'Email', 'Password', 'Role'],
+            [
+                ['Admin', 'admin@example.com', 'password', 'Admin'],
+                ['User', 'user@example.com', 'password', 'User'],
+            ]
+        );
 
-        if ($addDummyData) {
-            $this->info('Generating dummy data...');
-            Artisan::call('db:seed'); 
-            $this->info('Dummy data generated!');
-        }
-
-        // Step 6: Membuat database structure
-        $this->info('Setting up database structure...');
-
-        if (in_array('Inventory', $modules)) {
-            $this->call('migrate', ['--path' => 'database/migrations/inventory']);
-        }
-
-        if (in_array('Sales', $modules)) {
-            $this->call('migrate', ['--path' => 'database/migrations/sales']);
-        }
-
-        if (in_array('CRM', $modules)) {
-            $this->call('migrate', ['--path' => 'database/migrations/crm']);
-        }
-
-
-        // Menyelesaikan proses setup
-        $this->info('Setup Complete!');
+        // Step 7: Karakter di akhir setup
+        SetupHelper::displayThankYouCharacter();
     }
 }
