@@ -1,5 +1,5 @@
 {
-    "name" : "magicbox/laraquick",
+    "name" : "magicbox/laraquick-kit",
     "description": "Fast Laravel Application Generator.",
     "keywords": ["laravel","package","quick","application generator"],
     "type": "library",
@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Magicbox\\LaraQuick\\": "src/"
+            "Magicbox\\LaraQuickKit\\": "src/"
         }
     },
     "require":{
@@ -23,7 +23,7 @@
     "extra":{
         "laravel": {
             "providers": [
-                "Magicbox\\LaraQuick\\Providers\\LaraQuickServiceProvider"
+                "Magicbox\\LaraQuickKit\\Providers\\LaraQuickServiceProvider"
             ],
             "aliases": []
         }

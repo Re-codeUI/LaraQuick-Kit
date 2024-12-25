@@ -1,5 +1,5 @@
 <?php
-namespace Magicbox\Laraquick\Http\Requests;
+namespace Magicbox\LaraQuickKit\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

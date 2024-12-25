@@ -1,5 +1,5 @@
 <?php 
-namespace Magicbox\LaraQuick\Http\Controllers;
+namespace Magicbox\LaraQuickKit\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;

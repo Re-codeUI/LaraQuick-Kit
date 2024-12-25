@@ -1,6 +1,6 @@
 <?php
 
-namespace Magicbox\LaraQuick\Providers;
+namespace Magicbox\LaraQuickKit\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Magicbox\LaraQuick\Console\Commands\SetupCommand;

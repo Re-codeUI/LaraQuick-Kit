@@ -1,6 +1,6 @@
 <?php
 
-namespace Magicbox\LaraQuick\Console\Commands;
+namespace Magicbox\LaraQuickKit\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;

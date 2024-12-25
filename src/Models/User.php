@@ -1,6 +1,6 @@
 <?php
 
-namespace Magicbox\LaraQuick\Models;
+namespace Magicbox\LaraQuickKit\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
