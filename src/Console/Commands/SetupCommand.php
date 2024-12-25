@@ -33,7 +33,7 @@ class SetupCommand extends Command
             ['Bootstrap', 'Tailwind', 'Vue.js'],
             0
         );
-        SetupHelper::installFrameworkUI($uiFramework);
+        
 
         // Step 4: Setup Login System
         $this->info('Setting up custom authentication system...');

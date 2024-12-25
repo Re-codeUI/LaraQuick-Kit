@@ -24,29 +24,6 @@ class SetupHelper
         echo PHP_EOL;
     }
 
-    public static function installFrameworkUI($uiFramework)
-    {
-        if ($uiFramework === 'Bootstrap') {
-            echo "Installing Bootstrap..." . PHP_EOL;
-            exec('composer require laravel/ui');
-            exec('php artisan ui bootstrap');
-            exec('npm install && npm run dev');
-            echo "Bootstrap installed successfully." . PHP_EOL;
-        } elseif ($uiFramework === 'Tailwind') {
-            echo "Installing Tailwind CSS..." . PHP_EOL;
-            exec('composer require laravel-frontend-presets/tailwindcss');
-            exec('php artisan preset tailwindcss');
-            exec('npm install && npm run dev');
-            echo "Tailwind CSS installed successfully." . PHP_EOL;
-        } elseif ($uiFramework === 'Vue.js') {
-            echo "Installing Vue.js..." . PHP_EOL;
-            exec('composer require laravel/ui');
-            exec('php artisan ui vue');
-            exec('npm install && npm run dev');
-            echo "Vue.js installed successfully." . PHP_EOL;
-        }
-    }
-
     public static function createModuleRoles($module)
     {
         echo "Creating roles and permissions for $module module..." . PHP_EOL;
