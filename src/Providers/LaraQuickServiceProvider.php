@@ -3,7 +3,7 @@
 namespace Magicbox\LaraQuickKit\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Magicbox\LaraQuick\Console\Commands\SetupCommand;
+use Magicbox\LaraQuickKit\Console\Commands\SetupCommand;
 
 class LaraQuickServiceProvider extends ServiceProvider
 {

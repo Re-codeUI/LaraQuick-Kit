@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Magic\LaraQuickKit\Http\Controllers\AuthController;
+use Magicbox\LaraQuickKit\Http\Controllers\AuthController;
 
 //Group Authentication routes
 Route::group(['prefix' => 'Authenticate'], function(){
