@@ -13,7 +13,7 @@ class SetupCommand extends Command
 
     public function handle()
     {
-        // Step 1: Banner awal
+        // Step 1: Banner Awal
         SetupHelper::displayMagicBanner();
 
         $this->info("Let's configure your Laravel application with LaraQuick!");
@@ -34,10 +34,11 @@ class SetupCommand extends Command
             ['Bootstrap', 'Tailwind', 'Vue.js'],
             0
         );
-        
+        SetupHelper::installUIFramework($uiFramework);
 
         // Step 4: Setup Login System
         $this->info('Setting up custom authentication system...');
+        SetupHelper::integrateSpatieToUserModel();
         Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
         Artisan::call('migrate:fresh');
         $this->info('Custom authentication system set up!');
@@ -49,7 +50,7 @@ class SetupCommand extends Command
         }
         SetupHelper::createDefaultUsers();
 
-        // Step 6: Menampilkan kredensial login
+        // Step 6: Menampilkan Kredensial Login
         $this->info('Here are the login credentials for default users:');
         $this->table(
             ['Name', 'Email', 'Password', 'Role'],
