@@ -9,16 +9,16 @@ use Magicbox\LaraQuickKit\Console\Helpers\SetupHelper;
 class SetupCommand extends Command
 {
     protected $signature = 'laraquick:setup';
-    protected $description = 'Interactive Setup For LaraQuick';
+    protected $description = 'Interactive Setup for LaraQuick';
 
     public function handle()
     {
-        // Step 1: Banner Awal
+        // Step 1: Display Banner
         SetupHelper::displayMagicBanner();
 
-        $this->info("Let's configure your Laravel application with LaraQuick!");
+        $this->info("Welcome to LaraQuickKit setup!");
 
-        // Step 2: Pilih Modul
+        // Step 2: Select Modules
         $modules = $this->choice(
             'Which modules would you like to enable?',
             ['Inventory', 'Sales', 'CRM'],
@@ -28,39 +28,27 @@ class SetupCommand extends Command
         );
         $this->info('Selected Modules: ' . implode(', ', $modules));
 
-        // Step 3: Pilih Framework UI
-        $uiFramework = $this->choice(
-            'Which UI framework would you like to use?',
-            ['Bootstrap', 'Tailwind', 'Vue.js'],
-            0
-        );
-        SetupHelper::installUIFramework($uiFramework);
-
-        // Step 4: Setup Login System
-        $this->info('Setting up custom authentication system...');
-        SetupHelper::integrateSpatieToUserModel();
+        // Step 3: Setup Login System
+        $this->info('Setting up authentication system...');
         Artisan::call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
         Artisan::call('migrate:fresh');
-        $this->info('Custom authentication system set up!');
+        $this->info('Authentication system set up successfully!');
 
-        // Step 5: Seeders untuk Login
+        // Step 4: Seed Roles and Permissions
         $this->info('Seeding roles, permissions, and default users...');
         foreach ($modules as $module) {
-            SetupHelper::createModuleRoles($module);
+            SetupHelper::createModuleRolesAndPermissions($module);
         }
         SetupHelper::createDefaultUsers();
 
-        // Step 6: Menampilkan Kredensial Login
-        $this->info('Here are the login credentials for default users:');
+        // Step 5: Display Login Credentials
+        $this->info('Here are the login credentials for the default users:');
         $this->table(
             ['Name', 'Email', 'Password', 'Role'],
-            [
-                ['Admin', 'admin@example.com', 'password', 'Admin'],
-                ['User', 'user@example.com', 'password', 'User'],
-            ]
+            SetupHelper::getDefaultUserCredentials()
         );
 
-        // Step 7: Karakter di akhir setup
+        // Step 6: Display Thank You Character
         SetupHelper::displayThankYouCharacter();
     }
 }

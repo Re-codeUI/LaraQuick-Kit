@@ -2,10 +2,10 @@
 
 namespace Magicbox\LaraQuickKit\Console\Helpers;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 
 class SetupHelper
 {
@@ -25,86 +25,76 @@ class SetupHelper
         echo PHP_EOL;
     }
 
-    public static function installUIFramework($uiFramework)
+    public static function createModuleRolesAndPermissions($module)
     {
-        if ($uiFramework === 'Bootstrap') {
-            echo "Installing Bootstrap..." . PHP_EOL;
-            exec('composer require laravel/ui');
-            exec('php artisan ui bootstrap');
-            exec('npm install && npm run dev');
-            self::customizeAuthViews('bootstrap');
-            echo "Bootstrap installed." . PHP_EOL;
-        } elseif ($uiFramework === 'Tailwind') {
-            echo "Installing Tailwind CSS..." . PHP_EOL;
-            exec('npm install -D tailwindcss postcss autoprefixer');
-            exec('npx tailwindcss init');
-            self::customizeAuthViews('tailwind');
-            echo "Tailwind CSS installed." . PHP_EOL;
-        } elseif ($uiFramework === 'Vue.js') {
-            echo "Installing Vue.js..." . PHP_EOL;
-            exec('composer require laravel/ui');
-            exec('php artisan ui vue');
-            exec('npm install && npm run dev');
-            self::customizeAuthViews('vue');
-            echo "Vue.js installed." . PHP_EOL;
-        }
-    }
-    private static function customizeAuthViews($framework)
-    {
-        $authViewsPath = resource_path("views/auth");
-        File::deleteDirectory($authViewsPath);
+        echo "Creating roles and permissions for the $module module..." . PHP_EOL;
 
-        $customAuthPath = __DIR__ . "/../Resources/views/auth/$framework";
-        File::copyDirectory($customAuthPath, $authViewsPath);
+        $rolesAndPermissions = self::getModuleRolesAndPermissions($module);
 
-        echo ucfirst($framework) . " custom auth views integrated." . PHP_EOL;
-    }
-    public static function integrateSpatieToUserModel()
-    {
-        $userModelPath = app_path('Models/User.php');
-        if (file_exists($userModelPath)) {
-            $userModelContent = file_get_contents($userModelPath);
-            if (!str_contains($userModelContent, 'use Spatie\Permission\Traits\HasRoles;')) {
-                $updatedContent = str_replace(
-                    'use Illuminate\Notifications\Notifiable;',
-                    "use Illuminate\Notifications\Notifiable;\nuse Spatie\Permission\Traits\HasRoles;",
-                    $userModelContent
-                );
+        foreach ($rolesAndPermissions as $role => $permissions) {
+            $roleInstance = Role::firstOrCreate(['name' => $role]);
 
-                $updatedContent = str_replace(
-                    'use Notifiable;',
-                    'use Notifiable, HasRoles;',
-                    $updatedContent
-                );
-
-                file_put_contents($userModelPath, $updatedContent);
+            foreach ($permissions as $permission) {
+                $permissionInstance = Permission::firstOrCreate(['name' => $permission]);
+                $roleInstance->givePermissionTo($permissionInstance);
             }
         }
-    }
 
-    public static function createModuleRoles($module)
-    {
-        echo "Creating roles and permissions for $module module..." . PHP_EOL;
-        $roleName = $module . ' Manager';
-        $role = Role::create(['name' => $roleName]);
-        $permission = Permission::create(['name' => strtolower($module) . '.manage']);
-        $role->givePermissionTo($permission);
         echo "$module roles and permissions created." . PHP_EOL;
     }
 
     public static function createDefaultUsers()
     {
-        \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ])->assignRole('Admin');
+        $users = [
+            [
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'Admin',
+            ],
+            [
+                'name' => 'User',
+                'email' => 'user@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'User',
+            ],
+        ];
 
-        \App\Models\User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
-        ])->assignRole('User');
+        foreach ($users as $userData) {
+            $user = \App\Models\User::create($userData);
+            $user->assignRole($userData['role']);
+        }
+
+        echo "Default users created." . PHP_EOL;
+    }
+
+    public static function getDefaultUserCredentials()
+    {
+        return [
+            ['Admin', 'admin@example.com', 'password', 'Admin'],
+            ['User', 'user@example.com', 'password', 'User'],
+        ];
+    }
+
+    public static function getModuleRolesAndPermissions($module)
+    {
+        $modulesConfig = [
+            'Inventory' => [
+                'Admin' => ['inventory.view', 'inventory.manage'],
+                'Manager' => ['inventory.view'],
+                'Staff' => ['inventory.add', 'inventory.update'],
+            ],
+            'Sales' => [
+                'Admin' => ['sales.view', 'sales.manage'],
+                'Salesperson' => ['sales.add', 'sales.update'],
+            ],
+            'CRM' => [
+                'Admin' => ['crm.view', 'crm.manage'],
+                'Agent' => ['crm.view', 'crm.update'],
+            ],
+        ];
+
+        return $modulesConfig[$module] ?? [];
     }
 
     public static function displayThankYouCharacter()
