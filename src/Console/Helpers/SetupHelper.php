@@ -112,4 +112,14 @@ class SetupHelper
         echo '*********************************************' . PHP_EOL;
         echo PHP_EOL;
     }
+    public static function copyPermissionConfig()
+    {
+        $source = __DIR__ . '/../../vendor/spatie/laravel-permission/config/permission.php';  // Path ke file permission.php di vendor
+        $destination = base_path('config/permission.php');  // Tujuan penyalinan ke dalam config di Laravel
+
+        if (!File::exists($destination)) {
+            File::copy($source, $destination);  // Menyalin file konfigurasi
+            echo "permission.php config file copied." . PHP_EOL;
+        }
+    }
 }

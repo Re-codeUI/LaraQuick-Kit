@@ -1,5 +1,4 @@
 <?php
-
 namespace Magicbox\LaraQuickKit\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -34,13 +33,8 @@ class SetupCommand extends Command
         Artisan::call('migrate:fresh');
         $this->info('Authentication system set up successfully!');
 
-        // Step 4: Replace User Model
-        $this->info('Replacing User model...');
-        file_put_contents(
-            app_path('Models/User.php'),
-            str_replace('App\\Models\\User', 'Magicbox\\LaraQuickKit\\Models\\User', file_get_contents(app_path('Models/User.php')))
-        );
-        $this->info('User model replaced successfully!');
+        // Step 4: Copy Permission config
+        SetupHelper::copyPermissionConfig();  // Menyalin config permission.php
 
         // Step 5: Seed Roles and Permissions
         $this->info('Seeding roles, permissions, and default users...');
@@ -59,5 +53,4 @@ class SetupCommand extends Command
         // Step 7: Display Thank You Character
         SetupHelper::displayThankYouCharacter();
     }
-
 }
