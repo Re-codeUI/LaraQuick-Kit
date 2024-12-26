@@ -119,6 +119,18 @@ class SetupHelper
         echo '*********************************************' . PHP_EOL;
         echo PHP_EOL;
     }
-    
+    public static function copyPermissionConfig()
+    {
+        $sourcePath = __DIR__ . '/../../config/permission.php'; // Path ke config package
+        $destinationPath = config_path('permission.php'); // Path config Laravel Fresh
+
+        if (file_exists($sourcePath)) {
+            copy($sourcePath, $destinationPath);
+            echo "File permission.php copied to Laravel config folder successfully.\n";
+        } else {
+            echo "File permission.php not found in the package.\n";
+        }
+    }
+
 
 }
