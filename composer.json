@@ -1,38 +1,27 @@
 {
-    "name" : "magicbox/laraquick-kit",
-    "description": "Fast Laravel Application Generator.",
-    "keywords": ["laravel","package","quick","application generator"],
-    "type": "library",
+    "name": "magicbox/laraquickkit",
+    "description": "Quick setup kit for Laravel applications",
     "license": "MIT",
     "authors": [
         {
-            "name": "Re-codeUI",
-            "email": "recodeui@gmail.com"
+            "name": "Your Name",
+            "email": "your-email@example.com"
         }
     ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0"
+    },
     "autoload": {
         "psr-4": {
             "Magicbox\\LaraQuickKit\\": "src/"
         }
     },
-    "require":{
-        "php": "^8.0",
-        "illuminate/support": "^10.0 || ^11.0",
-        "spatie/laravel-permission": "^6.10"
-    },
-    "extra":{
+    "extra": {
         "laravel": {
             "providers": [
-                "Magicbox\\LaraQuickKit\\Providers\\LaraQuickServiceProvider"
-            ],
-            "aliases": []
+                "Magicbox\\LaraQuickKit\\LaraQuickKitServiceProvider"
+            ]
         }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
-
+    }
 }
