@@ -32,16 +32,23 @@ class SetupHelper
         $rolesAndPermissions = self::getModuleRolesAndPermissions($module);
 
         foreach ($rolesAndPermissions as $role => $permissions) {
-            $roleInstance = Role::firstOrCreate(['name' => $role]);
+            // Tambahkan guard_name 'web' saat membuat role
+            $roleInstance = Role::firstOrCreate(
+                ['name' => $role, 'guard_name' => 'web']
+            );
 
             foreach ($permissions as $permission) {
-                $permissionInstance = Permission::firstOrCreate(['name' => $permission]);
+                // Tambahkan guard_name 'web' saat membuat permission
+                $permissionInstance = Permission::firstOrCreate(
+                    ['name' => $permission, 'guard_name' => 'web']
+                );
                 $roleInstance->givePermissionTo($permissionInstance);
             }
         }
 
         echo "$module roles and permissions created." . PHP_EOL;
     }
+
 
     public static function createDefaultUsers()
     {
