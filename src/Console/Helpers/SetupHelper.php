@@ -69,7 +69,7 @@ class SetupHelper
         ];
 
         foreach ($users as $userData) {
-            $user = User::create([
+            $user = \Magicbox\LaraQuickKit\Models\User::create([
                 'name' => $userData['name'],
                 'email' => $userData['email'],
                 'password' => $userData['password'],
