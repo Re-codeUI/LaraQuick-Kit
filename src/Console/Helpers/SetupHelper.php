@@ -2,6 +2,7 @@
 
 namespace Magicbox\LaraQuickKit\Console\Helpers;
 
+use Magicbox\LaraQuickKit\Models\User;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
