@@ -20,8 +20,9 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Magicbox\\LaraQuickKit\\LaraQuickKitServiceProvider"
+                "Magicbox\\LaraQuickKit\\Providers\\LaraQuickKitServiceProvider"
             ]
         }
     }
+
 }
