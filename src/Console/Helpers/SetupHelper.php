@@ -32,15 +32,15 @@ class SetupHelper
         $rolesAndPermissions = self::getModuleRolesAndPermissions($module);
 
         foreach ($rolesAndPermissions as $role => $permissions) {
-            // Tambahkan guard_name 'web' saat membuat role
             $roleInstance = Role::firstOrCreate(
-                ['name' => $role, 'guard_name' => 'web']
+                ['name' => $role],
+                ['guard_name' => 'web'] // Tambahkan guard_name
             );
 
             foreach ($permissions as $permission) {
-                // Tambahkan guard_name 'web' saat membuat permission
                 $permissionInstance = Permission::firstOrCreate(
-                    ['name' => $permission, 'guard_name' => 'web']
+                    ['name' => $permission],
+                    ['guard_name' => 'web'] // Tambahkan guard_name
                 );
                 $roleInstance->givePermissionTo($permissionInstance);
             }
@@ -68,9 +68,14 @@ class SetupHelper
         ];
 
         foreach ($users as $userData) {
-            $user = \Magicbox\LaraQuickKit\Models\User::create($userData);
-            $user->assignRole($userData['role'], 'web');
+            $user = User::create([
+                'name' => $userData['name'],
+                'email' => $userData['email'],
+                'password' => $userData['password'],
+            ]);
 
+            // Menetapkan role dengan guard_name
+            $user->assignRole($userData['role'], 'web'); // Tambahkan guard_name di sini
         }
 
         echo "Default users created." . PHP_EOL;
