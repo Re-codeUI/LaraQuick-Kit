@@ -62,7 +62,7 @@ class SetupHelper
 
         foreach ($users as $userData) {
             $user = \Magicbox\LaraQuickKit\Models\User::create($userData);
-            $user->assignRole($userData['role']);
+            $user->assignRole($userData['role'], 'web');
 
         }
 
