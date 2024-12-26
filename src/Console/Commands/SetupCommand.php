@@ -33,24 +33,22 @@ class SetupCommand extends Command
         Artisan::call('migrate:fresh');
         $this->info('Authentication system set up successfully!');
 
-        // Step 4: Copy Permission config
-        SetupHelper::copyPermissionConfig();  // Menyalin config permission.php
-
-        // Step 5: Seed Roles and Permissions
+        
+        // Step 4: Seed Roles and Permissions
         $this->info('Seeding roles, permissions, and default users...');
         foreach ($modules as $module) {
             SetupHelper::createModuleRolesAndPermissions($module);
         }
         SetupHelper::createDefaultUsers();
 
-        // Step 6: Display Login Credentials
+        // Step 5: Display Login Credentials
         $this->info('Here are the login credentials for the default users:');
         $this->table(
             ['Name', 'Email', 'Password', 'Role'],
             SetupHelper::getDefaultUserCredentials()
         );
 
-        // Step 7: Display Thank You Character
+        // Step 6: Display Thank You Character
         SetupHelper::displayThankYouCharacter();
     }
 }

@@ -119,18 +119,6 @@ class SetupHelper
         echo '*********************************************' . PHP_EOL;
         echo PHP_EOL;
     }
-    public static function copyPermissionConfig()
-    {
-        echo 'Copying Spatie permission config file...' . PHP_EOL;
-        $sourcePath = base_path('vendor/spatie/laravel-permission/config/permission.php');
-        $destinationPath = config_path('permission.php');
-
-        if (File::exists($sourcePath)) {
-            File::copy($sourcePath, $destinationPath);
-            echo 'Spatie permission config file copied successfully.' . PHP_EOL;
-        } else {
-            echo 'Spatie permission config file not found.' . PHP_EOL;
-        }
-    }
+    
 
 }
