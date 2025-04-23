@@ -1,35 +1,34 @@
 {
     "name": "magicbox/laraquickkit",
-    "description": "A Laravel package to simplify web development by offering various modules like CRM, Inventory, and HR.",
+    "description": "A Laravel package to provide modular business applications.",
     "type": "library",
     "license": "MIT",
-    "authors": [
-      {
-        "name": "LaraQuickKit",
-        "email": "recodeui@gmail.com"
-      }
-    ],
-    "require": {
-        "php": ">=8.1",
-        "laravel/framework": "^10.0",
-        "spatie/laravel-permission": "^5.0"
-    },
     "autoload": {
         "psr-4": {
-        "MagicBox\\LaraQuickKit\\": "src/"
-        }
+            "MagicBox\\LaraQuickKit\\": "src/"
+        },
+        "files": [
+            "src/Helpers/FormatHelper.php",
+            "src/Helpers/PermissionHelper.php"
+        ]
+    },
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^10.0 || ^11.0 || ^12.0",
+        "spatie/laravel-permission": "^6.0",
+        "laravel/ui": "^4.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "orchestra/testbench": "^8.0"
     },
     "extra": {
         "laravel": {
-        "providers": [
-            "MagicBox\\LaraQuickKit\\Providers\\LaraQuickKitServiceProvider"
-        ]
+            "providers": [
+                "MagicBox\\LaraQuickKit\\Providers\\LaraQuickServiceProvider"
+            ]
         }
-    },
-    "scripts": {
-        "post-autoload-dump": []
     },
     "minimum-stability": "stable",
     "prefer-stable": true
-  }
-  
+}

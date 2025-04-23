@@ -1,0 +1,17 @@
+Urutan pengerjaan
+Urutan Final dengan Penjelasan
+Urutan	File	Alasan Dibuat Duluan
+
+Step 1
+1️⃣	composer.json	Menentukan dependensi & autoload class pertama kali ✅
+2️⃣	Providers/LaraQuickServiceProvider.php	Agar Laravel mengenali semua helper, middleware, event, listener ✅
+3️⃣	Helpers/FormatHelper.php	Tidak bergantung pada file lain, bisa dibuat lebih awal ✅
+4️⃣	Helpers/PermissionHelper.php	Bisa digunakan oleh middleware dan test case ✅
+5️⃣	Middleware/EnsureUserHasPermission.php	Menggunakan PermissionHelper untuk cek permission user ✅ 
+6️⃣	Events/UserRegistered.php	Dibutuhkan oleh listener untuk event user register ✅
+7️⃣	Listeners/SendWelcomeEmail.php	Mendengarkan event UserRegistered, jadi dibuat setelah event ada ✅ 
+8️⃣	Routes/web.php	Mendaftarkan rute yang bisa menggunakan middleware & helper ✅
+
+Step 2
+Authentikasi
+1. AuthTest.phph ✅
