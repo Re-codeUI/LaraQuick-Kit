@@ -16,6 +16,14 @@ class LaraQuickPublishCommand extends Command
 
     protected $description = 'Publish resources from the LaraQuickKit package to your Laravel app';
 
+    protected Filesystem $files;
+
+    public function __construct(Filesystem $files)
+    {
+        parent::__construct();
+        $this->files = $files;
+    }
+
     public function handle(): void
     {
         if ($this->option('all') || $this->option('views')) {
@@ -64,43 +72,37 @@ class LaraQuickPublishCommand extends Command
 
     protected function copyFile(string $source, string $destination, string $label): void
     {
-        $files = app(Filesystem::class);
-
-        if (! $files->exists($source)) {
+        if (! $this->files->exists($source)) {
             $this->warn("⚠️ Source {$label} not found.");
             return;
         }
 
-        if ($files->exists($destination) && ! $this->option('force')) {
+        if ($this->files->exists($destination) && ! $this->option('force')) {
             $this->warn("⚠️ {$label} already exists. Use --force to overwrite.");
             return;
         }
 
         $this->makeDirectory(dirname($destination));
-        $files->copy($source, $destination);
+        $this->files->copy($source, $destination);
         $this->info("📄 Published: {$label}");
     }
 
     protected function copyDirectory(string $source, string $destination, string $label): void
     {
-        $files = app(Filesystem::class);
-
-        if (! $files->isDirectory($source)) {
+        if (! $this->files->isDirectory($source)) {
             $this->warn("⚠️ Source {$label} directory not found.");
             return;
         }
 
         $this->makeDirectory($destination);
-        $files->copyDirectory($source, $destination);
+        $this->files->copyDirectory($source, $destination);
         $this->info("📁 Published: {$label}");
     }
 
     protected function makeDirectory(string $path): void
     {
-        $files = app(Filesystem::class);
-
-        if (! $files->isDirectory($path)) {
-            $files->makeDirectory($path, 0755, true);
+        if (! $this->files->isDirectory($path)) {
+            $this->files->makeDirectory($path, 0755, true);
         }
     }
 }
