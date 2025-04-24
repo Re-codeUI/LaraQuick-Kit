@@ -29,7 +29,7 @@ return [
     'modules' => [
 
         'inventory' => [
-            'enabled' => false,
+            'enabled' => true,
             'dependencies' => [
                 'maatwebsite/excel', // Export & Import data Inventory
                 'barryvdh/laravel-dompdf', // Cetak laporan stok dalam bentuk PDF
@@ -37,7 +37,7 @@ return [
         ],
 
         'sales' => [
-            'enabled' => false,
+            'enabled' => true,
             'dependencies' => [
                 'mpdf/mpdf', // Alternatif untuk generate PDF invoice
                 'omnipay/omnipay', // Payment Gateway Support
@@ -46,7 +46,7 @@ return [
         ],
 
         'hr' => [
-            'enabled' => false,
+            'enabled' => true,
             'dependencies' => [
                 'spatie/laravel-activitylog', // Logging aktivitas karyawan
                 'spatie/laravel-permission', // Manajemen Role & Permission untuk HR
@@ -54,7 +54,11 @@ return [
         ],
 
     ],
-
+    'active_modules' => [
+        'Inventory',
+        'Sales',
+        'hr',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Default Roles & Permissions

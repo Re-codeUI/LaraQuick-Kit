@@ -53,12 +53,13 @@ class RouteServiceProvider extends ServiceProvider
             if (!empty($config['enabled'])) {
                 $moduleRoutePath = __DIR__ . "/../Routes/modules/{$module}.php";
                 if (file_exists($moduleRoutePath)) {
-                    Route::middleware('web')
-                        ->namespace($this->namespace)
+                    Route::prefix($module)
+                        ->middleware(['web', 'auth'])
+                        ->namespace($this->namespace . '\\' . ucfirst($module))
+                        ->name($module . '.')
                         ->group($moduleRoutePath);
                 }
             }
         }
-        
     }
 }

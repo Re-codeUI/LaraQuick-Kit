@@ -26,10 +26,7 @@ class RolePermissionSeeder extends Seeder
         $globalPermissions = [];
 
         foreach ($allRoles as $roleKey => $roleData) {
-            // Abaikan 'admin' karena bukan per modul
-            if ($roleKey === 'admin') {
-                continue;
-            }
+            if ($roleKey === 'admin') continue;
 
             // Dapatkan prefix modul dari key (e.g. 'inventory_manager' => 'inventory')
             $parts = explode('_', $roleKey);
@@ -54,12 +51,13 @@ class RolePermissionSeeder extends Seeder
                 $globalPermissions[] = $permission->name;
             }
         }
-
+        
         // Sync semua permission ke admin_global
         $adminGlobal->syncPermissions(array_unique($globalPermissions));
 
-        if ($command) {
-            $command->info('Role admin_global dan role per modul berhasil dibuat dengan permission yang sesuai.');
+        if (method_exists($this, 'command') && $this->command) {
+            $this->command->info('Role admin_global dan role per modul berhasil dibuat dengan permission yang sesuai.');
         }
+        
     }
 }

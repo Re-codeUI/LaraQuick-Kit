@@ -22,7 +22,9 @@ class EnsureUserHasPermission
     {
         // Cek apakah user sudah login
         if (!Auth::check()) {
-            return response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            return $request->expectsJson()
+                ? response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED)
+                : redirect()->route('login');
         }
 
         $user = Auth::user();

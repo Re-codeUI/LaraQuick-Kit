@@ -41,6 +41,10 @@ class LaraQuickServiceProvider extends ServiceProvider
                 __DIR__ . '/../Resources/views/layouts' => resource_path('views/layouts'),
                 __DIR__ . '/../Resources/views/home.blade.php' => resource_path('views/home.blade.php'),
             ], 'laraquick-views');
+            $this->publishes([
+                __DIR__.'/../Config/laraquick.php' => config_path('laraquick.php'),
+            ], 'laraquick-config');
+            
         }
 
         // Load route setelah boot selesai
