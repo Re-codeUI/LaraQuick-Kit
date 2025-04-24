@@ -5,12 +5,15 @@ namespace MagicBox\LaraQuickKit\Providers;
 use Illuminate\Support\ServiceProvider;
 use MagicBox\LaraQuickKit\Console\Commands\LaraQuickPublishCommand;
 use MagicBox\LaraQuickKit\Console\Commands\AddMiddlewareCommand;
+use MagicBox\LaraQuickKit\Console\Commands\LaraQuickSeedCommand;
 
 class LaraQuickServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        // Tidak perlu register command di sini
+        $this->commands([
+            LaraQuickSeedCommand::class,
+        ]);
     }
 
     public function boot()
