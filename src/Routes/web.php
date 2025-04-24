@@ -1,45 +1,44 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes (LaraQuickKit)
 |--------------------------------------------------------------------------
 |
-| File ini digunakan untuk mendefinisikan route global yang digunakan oleh
-| LaraQuickKit. Semua route utama yang dibutuhkan aplikasi ini berada di sini.
+| File ini memuat semua rute global utama untuk LaraQuickKit, termasuk
+| autentikasi, halaman utama, dan pemuatan modul dinamis.
 |
 */
 
-// Halaman utama (pastikan bisa diakses tanpa login)
+// Halaman utama (tanpa login)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Route untuk autentikasi Laravel bawaan
+// Rute bawaan autentikasi Laravel (registrasi dimatikan)
 Auth::routes([
-    'register' => false, // Matikan pendaftaran jika tidak ingin user bisa register sendiri
+    'register' => false,
 ]);
 
-// Route yang memerlukan autentikasi
+// Rute-rute yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
-    
-    // Dashboard setelah login
+
+    // Dashboard utama (gunakan permission dari middleware kustom)
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->middleware('permission:view dashboard');
-    
+    })->middleware('has_permission:view dashboard')->name('dashboard');
 
-    // Muat route dari modul yang dipilih pengguna
+    // Pemuatan modul dinamis dari config/laraquick.php
     $modules = config('laraquick.modules', []);
-    
+
     if (is_array($modules)) {
         foreach ($modules as $module => $settings) {
             if (!empty($settings['enabled']) && $settings['enabled'] === true) {
-                $moduleRoutePath = base_path("routes/modules/{$module}.php");
-                if (file_exists($moduleRoutePath)) {
-                    require $moduleRoutePath;
+                $customPath = base_path("routes/modules/{$module}.php");
+                if (file_exists($customPath)) {
+                    require $customPath;
                 }
             }
         }

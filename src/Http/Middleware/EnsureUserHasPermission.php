@@ -6,21 +6,13 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasPermission
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $permissions
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next, $permissions)
     {
-        // Cek apakah user sudah login
         if (!Auth::check()) {
             return $request->expectsJson()
                 ? response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED)
@@ -29,32 +21,50 @@ class EnsureUserHasPermission
 
         $user = Auth::user();
 
-        // Ambil permission dari cache untuk meningkatkan performa
+        // Buat cache key dengan lebih aman
+        $cacheKey = 'user_permissions_' . md5($user->id . '_' . $user->email);
+
+        // Cache permission user
         $cachedPermissions = Cache::remember(
-            'user_permissions_' . $user->id,
+            $cacheKey,
             now()->addMinutes(10),
             function () use ($user) {
                 return $user->getAllPermissions()->pluck('name')->toArray();
             }
         );
 
-        // Mendukung multi-permission (AND = ',', OR = '|')
+        $hasPermission = false;
+
         if (str_contains($permissions, '|')) {
             $permissionsArray = explode('|', $permissions);
-            if (!array_intersect($permissionsArray, $cachedPermissions)) {
-                return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+            foreach ($permissionsArray as $perm) {
+                if ($this->matchPermission($perm, $cachedPermissions)) {
+                    $hasPermission = true;
+                    break;
+                }
             }
         } elseif (str_contains($permissions, ',')) {
             $permissionsArray = explode(',', $permissions);
-            if (array_diff($permissionsArray, $cachedPermissions)) {
-                return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
-            }
+            $hasPermission = collect($permissionsArray)->every(fn($perm) => $this->matchPermission($perm, $cachedPermissions));
         } else {
-            if (!in_array($permissions, $cachedPermissions)) {
-                return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
-            }
+            $hasPermission = $this->matchPermission($permissions, $cachedPermissions);
+        }
+
+        if (!$hasPermission) {
+            Log::warning("User ID {$user->id} mencoba akses tanpa permission: {$permissions}");
+            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
         }
 
         return $next($request);
+    }
+
+    private function matchPermission(string $permission, array $userPermissions): bool
+    {
+        if (str_contains($permission, '*')) {
+            $pattern = str_replace('*', '.*', preg_quote($permission, '/'));
+            return collect($userPermissions)->filter(fn($p) => preg_match("/^{$pattern}$/", $p))->isNotEmpty();
+        }
+
+        return in_array($permission, $userPermissions);
     }
 }

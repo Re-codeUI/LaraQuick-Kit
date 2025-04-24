@@ -15,3 +15,45 @@ Step 1
 Step 2
 Authentikasi
 1. AuthTest.phph ✅
+
+
+kita diskuskikan ini
+Menurut anda lebih baik mana 
+Siapkan User dengan Role Admin yang memiliki permission secara global ke semua modul
+atau 
+menyiapkan User dengan Role Admin untuk masing-masing modul 
+
+coba berikan pendapat mu
+
+jika dibuat begini 
+admin_global → full access
+
+admin_inventory, admin_sales → akses spesifik
+
+apa kelebihan dan kekurangannya
+lalu kemungkinan apa saja yang akan ditimbulkan
+
+
+Tahap 1: Perencanaan Struktur Role & Permission ✅
+Tahap 2: Desain Seeder Modular ✅
+Tahap 3: Sistem Deteksi Modul Aktif ✅
+Tahap 4: Command untuk Setup Role & Permission ✅
+Tahap 5: Middleware Akses ✅
+Tahap 6: Maintenance & Sinkronisasi
+
+Pembahasan Tahap 1
+yang diharapkan
+Role admi hanya ada 1 role untuk setiap modul 
+seperti ini skenarionya
+Admin_Global 
+    -Inentory 
+    -HR 
+    -Finance
+    -modul lainnya
+Admin_global ini memiliki akses untuk
+menambah user lain dan memberikan permission yang diperlukan untuk module yang dipilihnya 
+contoh
+Saat Setup LaraQuick 
+PT A memilih Modul Inventory 
+maka dia mendapatkan 1 user dengan role admin_global dan permission 
+

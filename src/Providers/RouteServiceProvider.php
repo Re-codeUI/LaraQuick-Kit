@@ -3,6 +3,7 @@
 namespace MagicBox\LaraQuickKit\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use MagicBox\LaraQuickKit\Http\Middleware\EnsureUserHasPermission;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
@@ -18,6 +19,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+        Route::aliasMiddleware('has_permission', EnsureUserHasPermission::class);
     }
 
     /**
